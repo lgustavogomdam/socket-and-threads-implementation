@@ -1,14 +1,18 @@
 package io.github.lgustavogomdam.diagnosticomedico.cliente_servidor;
 
+import com.google.common.collect.Multimap;
 import io.github.lgustavogomdam.diagnosticomedico.sintomas_doencas.Doenca;
 import io.github.lgustavogomdam.diagnosticomedico.sintomas_doencas.Sintoma;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class ServidorDiagnostico {
     private int porta;
+    private DiagnosticoApriori apriori = new DiagnosticoApriori();
 
     public ServidorDiagnostico(int porta) {
         this.porta = porta;
@@ -31,30 +35,44 @@ public class ServidorDiagnostico {
         }
     }
 
-    private void processarCliente(Socket clienteSocket) {
-        try (ObjectInputStream entrada = new ObjectInputStream(clienteSocket.getInputStream());
-             ObjectOutputStream saida = new ObjectOutputStream(clienteSocket.getOutputStream())) {
-            
-            // Recebendo a lista de sintomas do cliente
-            List<Sintoma> sintomas = (List<Sintoma>) entrada.readObject();
+    private void processarCliente(Socket clienteSocket){
+        
+        try (
+            ObjectInputStream entrada = new ObjectInputStream(clienteSocket.getInputStream());
+            ObjectOutputStream saida = new ObjectOutputStream(clienteSocket.getOutputStream())) {
+        
+            // Receber a mensagem do cliente para identificar a ação desejada
+            String mensagem = (String) entrada.readObject();
 
-            // Realizando o diagnóstico com base nos sintomas
-            DiagnosticoApriori apriori = new DiagnosticoApriori();
-            
-            //Treinando o algoritmo
-            apriori.adicionarExemploTreinamento(Doenca.D0, List.of(Sintoma.S0, Sintoma.S1, Sintoma.S2));
-            apriori.adicionarExemploTreinamento(Doenca.D1, List.of(Sintoma.S0, Sintoma.S1));
-            apriori.adicionarExemploTreinamento(Doenca.D2, List.of(Sintoma.S2, Sintoma.S3));
-            apriori.adicionarExemploTreinamento(Doenca.D3, List.of(Sintoma.S4, Sintoma.S5));
-            apriori.adicionarExemploTreinamento(Doenca.D4, List.of(Sintoma.S6, Sintoma.S7));
-            apriori.adicionarExemploTreinamento(Doenca.D4, List.of(Sintoma.S7, Sintoma.S8, Sintoma.S3));
-            
-            double minSupport = 1.0; // Definindo o suporte mínimo conforme necessário
-            
-            String doencaDiagnostico = apriori.diagnosticar(sintomas, minSupport); // Diagnosticando
-
-            // Enviando o diagnóstico de volta para o cliente
-            saida.writeObject(doencaDiagnostico);
+            if (mensagem.equals("ListarCasos")) {
+                // Ação de listar os casos
+                HashMap<Doenca,List<Sintoma>> casos = apriori.listAllDiagnosticos();
+                saida.writeObject(casos);
+                
+            } else if (mensagem.equals("ObterDiagnostico")) {
+                
+                // Recebendo a lista de sintomas do cliente
+                List<Sintoma> sintomas = (List<Sintoma>) entrada.readObject();
+                double minSupport = 1.0;
+                String doencaDiagnostico = apriori.diagnosticar(sintomas, minSupport);
+                saida.writeObject(doencaDiagnostico);
+                
+            } else if (mensagem.equals("TreinarDiagnostico")) {
+                
+                // Recebendo o diagnóstico para treinamento
+                HashMap<Doenca, List<Sintoma>> mapDiagnostico = (HashMap<Doenca, List<Sintoma>>) entrada.readObject();
+                
+                Set<Doenca> chaves = mapDiagnostico.keySet();
+                
+                Doenca doenca = chaves.iterator().next();
+                
+                apriori.adicionarExemploTreinamento(doenca,mapDiagnostico.get(doenca));
+                 
+                String msgResposta = new String("Diagnóstico cadastrado com sucesso!");
+                
+                // Enviando o diagnóstico de volta para o cliente
+                saida.writeObject(msgResposta);
+            }   
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {

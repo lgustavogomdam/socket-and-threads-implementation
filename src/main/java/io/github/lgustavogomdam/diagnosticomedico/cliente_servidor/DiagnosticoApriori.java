@@ -19,15 +19,19 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 
 public class DiagnosticoApriori {
-    private Multimap<Doenca, Sintoma> dadosTreinamento;
+    private HashMap<Doenca,List<Sintoma>> dadosTreinamento;
 
     public DiagnosticoApriori() {
-        dadosTreinamento = ArrayListMultimap.create();
+        dadosTreinamento = new HashMap<>();
     }
 
     public void adicionarExemploTreinamento(Doenca doenca, List<Sintoma> sintomas) {
-        dadosTreinamento.putAll(doenca, sintomas);
+        if (!dadosTreinamento.containsKey(doenca)) {
+            dadosTreinamento.put(doenca, new ArrayList<>());
+        }
+        dadosTreinamento.get(doenca).addAll(sintomas);
     }
+
 
     public Map<Set<Sintoma>, Integer> treinar(double minSupport) {
         Map<Set<Sintoma>, Integer> itemsetsFrequentes = new HashMap<>();
@@ -43,8 +47,10 @@ public class DiagnosticoApriori {
 
     private Map<Sintoma, Integer> encontrarItemsetsFrequentesDeTamanho1(double minSupport) {
         Map<Sintoma, Integer> frequencias = new HashMap<>();
-        for (Sintoma sintoma : dadosTreinamento.values()) {
-            frequencias.put(sintoma, frequencias.getOrDefault(sintoma, 0) + 1);
+        for (List<Sintoma> sintomas : dadosTreinamento.values()) {
+            for (Sintoma sintoma : sintomas) {
+                frequencias.put(sintoma, frequencias.getOrDefault(sintoma, 0) + 1);
+            }
         }
 
         Map<Sintoma, Integer> itemsetsFrequentes = new HashMap<>();
@@ -80,35 +86,63 @@ public class DiagnosticoApriori {
 
     private int calcularSuporte(Set<Sintoma> itemset) {
         int suporte = 0;
-        for (Collection<Sintoma> sintomas : dadosTreinamento.asMap().values()) {
-            if (sintomas.containsAll(itemset)) {
+        for (Entry<Doenca, List<Sintoma>> entry : dadosTreinamento.entrySet()) {
+            List<Sintoma> sintomasDaDoenca = entry.getValue();
+            if (sintomasDaDoenca.containsAll(itemset)) {
                 suporte++;
             }
         }
         return suporte;
     }
     
-    
     public String diagnosticar(List<Sintoma> sintomas, double minSupport) {
+        
         Map<Set<Sintoma>, Integer> itemsetsFrequentes = treinar(minSupport);
-        Map<Doenca, Integer> contagemDoencas = new HashMap<>();
+        Map<Doenca, Double> similaridades = new HashMap<>();
+        double maxSimilarity = 0.0;
 
         for (Doenca doenca : dadosTreinamento.keySet()) {
+            int matchCount = 0;
+            List<Sintoma> sintomasDaDoenca = new ArrayList<>(dadosTreinamento.get(doenca));
+
             for (Set<Sintoma> itemset : itemsetsFrequentes.keySet()) {
-                if (dadosTreinamento.get(doenca).containsAll(itemset) && sintomas.containsAll(itemset)) {
-                    contagemDoencas.put(doenca, contagemDoencas.getOrDefault(doenca, 0) + 1);
+                if (sintomas.containsAll(itemset) && sintomasDaDoenca.containsAll(itemset)) {
+                    matchCount++;
                 }
+            }
+
+            // Calcula a similaridade como a contagem de correspondências dividida pelo tamanho dos sintomas da doença
+            double similarity = (double) matchCount / sintomasDaDoenca.size();
+            similaridades.put(doenca, similarity);
+
+            if (similarity > maxSimilarity) {
+                maxSimilarity = similarity;
             }
         }
 
-        if (contagemDoencas.isEmpty()) {
-            // Retorna um possível diagnóstico (primeira doença encontrada) e informa que não foi encontrado um diagnóstico confiável
-            String possivelDiagnostico = dadosTreinamento.keySet().iterator().next().toString();
-            
-            return "Aviso: Não foi encontrado um diagnóstico confiável.\nPossível diagnóstico: " + possivelDiagnostico;
-        } else {
-            return Collections.max(contagemDoencas.entrySet(), Entry.comparingByValue()).getKey().toString();
+        if (maxSimilarity > 0.0) {
+            final double finalMaxSimilarity = maxSimilarity; // Variável final para usar na expressão lambda
+
+            // Encontre a doença com a maior similaridade
+            Doenca diagnóstico = similaridades.entrySet().stream()
+                .filter(entry -> entry.getValue() == finalMaxSimilarity)
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElse(null);
+
+            if (diagnóstico != null) {
+                return diagnóstico.toString();
+            }
         }
+
+        return "Aviso: Não foi encontrado um diagnóstico confiável.";
+    }
+
+
+    
+    public HashMap<Doenca,List<Sintoma>> listAllDiagnosticos(){
+        
+        return this.dadosTreinamento;
     }
 
     public static void imprimirDiagnostico(Map<String, Double> diagnósticos) {

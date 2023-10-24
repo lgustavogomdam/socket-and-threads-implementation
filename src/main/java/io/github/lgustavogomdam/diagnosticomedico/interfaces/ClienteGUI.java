@@ -5,6 +5,7 @@
 package io.github.lgustavogomdam.diagnosticomedico.interfaces;
 
 import io.github.lgustavogomdam.diagnosticomedico.cliente_servidor.Cliente;
+import io.github.lgustavogomdam.diagnosticomedico.sintomas_doencas.Doenca;
 import io.github.lgustavogomdam.diagnosticomedico.sintomas_doencas.Sintoma;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 public class ClienteGUI extends javax.swing.JFrame {
 
     private List<Sintoma> sintomasSelecionados = new ArrayList<>();
+    private Doenca doencaSelecionadas = null;
     private Cliente cliente;
     
     public ClienteGUI() {
@@ -27,6 +29,7 @@ public class ClienteGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        grupoDoencas = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         S0 = new javax.swing.JCheckBox();
         S1 = new javax.swing.JCheckBox();
@@ -41,6 +44,15 @@ public class ClienteGUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         ObterDiagnostico = new javax.swing.JButton();
+        ListarCasos = new javax.swing.JButton();
+        EnviarDiagnostico = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        D0 = new javax.swing.JCheckBox();
+        D1 = new javax.swing.JCheckBox();
+        D2 = new javax.swing.JCheckBox();
+        D3 = new javax.swing.JCheckBox();
+        D4 = new javax.swing.JCheckBox();
+        D5 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,22 +126,22 @@ public class ClienteGUI extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(S0, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(S1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(S2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(S3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(S4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(S5, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(S6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(S7, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(S8, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,6 +173,8 @@ public class ClienteGUI extends javax.swing.JFrame {
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
+        jTextArea1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextArea1.setEnabled(false);
         jScrollPane1.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -174,10 +188,10 @@ public class ClienteGUI extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         ObterDiagnostico.setText("Obter Diagnostico");
@@ -187,32 +201,148 @@ public class ClienteGUI extends javax.swing.JFrame {
             }
         });
 
+        ListarCasos.setText("Listar Casos");
+        ListarCasos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ListarCasosActionPerformed(evt);
+            }
+        });
+
+        EnviarDiagnostico.setText("Enviar Diagnostico");
+        EnviarDiagnostico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EnviarDiagnosticoActionPerformed(evt);
+            }
+        });
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Doenças"));
+
+        grupoDoencas.add(D0);
+        D0.setMnemonic('0');
+        D0.setText("D0");
+        D0.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                D0ActionPerformed(evt);
+            }
+        });
+
+        grupoDoencas.add(D1);
+        D1.setMnemonic('1');
+        D1.setText("D1");
+        D1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                D1ActionPerformed(evt);
+            }
+        });
+
+        grupoDoencas.add(D2);
+        D2.setMnemonic('2');
+        D2.setText("D2");
+        D2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                D2ActionPerformed(evt);
+            }
+        });
+
+        grupoDoencas.add(D3);
+        D3.setMnemonic('3');
+        D3.setText("D3");
+        D3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                D3ActionPerformed(evt);
+            }
+        });
+
+        grupoDoencas.add(D4);
+        D4.setMnemonic('4');
+        D4.setText("D4");
+        D4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                D4ActionPerformed(evt);
+            }
+        });
+
+        grupoDoencas.add(D5);
+        D5.setMnemonic('5');
+        D5.setText("D5");
+        D5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                D5ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(D0, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(D1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(D2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(D3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(D4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(D5, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(D3)
+                        .addGap(26, 26, 26)
+                        .addComponent(D4)
+                        .addGap(27, 27, 27)
+                        .addComponent(D5))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(D0)
+                        .addGap(26, 26, 26)
+                        .addComponent(D1)
+                        .addGap(27, 27, 27)
+                        .addComponent(D2)))
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(ObterDiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ListarCasos, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(EnviarDiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(166, 166, 166)
-                        .addComponent(ObterDiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(ObterDiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ObterDiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ListarCasos, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(EnviarDiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -293,8 +423,113 @@ public class ClienteGUI extends javax.swing.JFrame {
         jTextArea1.setText(resultadoDiagnostico);
     }//GEN-LAST:event_ObterDiagnosticoActionPerformed
 
+    private void ListarCasosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ListarCasosActionPerformed
+        jTextArea1.setText(this.cliente.receberTodosDiagnosticos().toString());
+    }//GEN-LAST:event_ListarCasosActionPerformed
+
+    private void EnviarDiagnosticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnviarDiagnosticoActionPerformed
+        
+        D0.setMnemonic(0);
+        D1.setMnemonic(1);
+        D2.setMnemonic(2);
+        D3.setMnemonic(3);
+        D4.setMnemonic(4);
+
+        // Limpando a lista de sintomas selecionados
+        sintomasSelecionados.clear();
+
+        // Verificando quais JCheckBox estão selecionados e adicionando os sintomas selecionados à lista
+        if (S0.isSelected()) {
+            sintomasSelecionados.add(Sintoma.S0);
+        }
+        if (S1.isSelected()) {
+            sintomasSelecionados.add(Sintoma.S1);
+        }
+        if (S2.isSelected()) {
+            sintomasSelecionados.add(Sintoma.S2);
+        }
+        if (S3.isSelected()) {
+            sintomasSelecionados.add(Sintoma.S3);
+        }
+        if (S4.isSelected()) {
+            sintomasSelecionados.add(Sintoma.S4);
+        }
+        if (S5.isSelected()) {
+            sintomasSelecionados.add(Sintoma.S5);
+        }
+        if (S6.isSelected()) {
+            sintomasSelecionados.add(Sintoma.S6);
+        }
+        if (S7.isSelected()) {
+            sintomasSelecionados.add(Sintoma.S7);
+        }
+        if (S8.isSelected()) {
+            sintomasSelecionados.add(Sintoma.S8);
+        }
+        
+        // Limpando a lista de sintomas selecionados
+        doencaSelecionadas = null;
+        
+        System.out.println(grupoDoencas.getSelection().getMnemonic());
+        // Verificando quais JCheckBox estão selecionados e adicionando as Doencas selecionadas à lista         
+        switch(grupoDoencas.getSelection().getMnemonic()){
+            case 0:
+                this.doencaSelecionadas = Doenca.D0;
+            break;
+            case 1:
+                this.doencaSelecionadas = Doenca.D1;
+            break;
+            case 2:
+                this.doencaSelecionadas = Doenca.D2;
+            break;
+            case 3:
+                this.doencaSelecionadas = Doenca.D3;
+            break;
+            case 4:
+                this.doencaSelecionadas = Doenca.D4;
+            break;
+            default:
+                this.doencaSelecionadas = Doenca.D5;
+            break;   
+        }
+        
+        jTextArea1.setText(cliente.enviarDiagnostico(doencaSelecionadas, sintomasSelecionados));
+    }//GEN-LAST:event_EnviarDiagnosticoActionPerformed
+
+    private void D0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_D0ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_D0ActionPerformed
+
+    private void D1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_D1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_D1ActionPerformed
+
+    private void D2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_D2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_D2ActionPerformed
+
+    private void D3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_D3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_D3ActionPerformed
+
+    private void D4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_D4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_D4ActionPerformed
+
+    private void D5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_D5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_D5ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox D0;
+    private javax.swing.JCheckBox D1;
+    private javax.swing.JCheckBox D2;
+    private javax.swing.JCheckBox D3;
+    private javax.swing.JCheckBox D4;
+    private javax.swing.JCheckBox D5;
+    private javax.swing.JButton EnviarDiagnostico;
+    private javax.swing.JButton ListarCasos;
     private javax.swing.JButton ObterDiagnostico;
     private javax.swing.JCheckBox S0;
     private javax.swing.JCheckBox S1;
@@ -305,8 +540,10 @@ public class ClienteGUI extends javax.swing.JFrame {
     private javax.swing.JCheckBox S6;
     private javax.swing.JCheckBox S7;
     private javax.swing.JCheckBox S8;
+    private javax.swing.ButtonGroup grupoDoencas;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
